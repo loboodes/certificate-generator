@@ -1,0 +1,368 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>نظام إدارة الشهادات المتقدم - الصفحة الرئيسية</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding: 40px 20px;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .hero {
+            background: white;
+            border-radius: 20px;
+            padding: 60px 40px;
+            text-align: center;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+            margin-bottom: 40px;
+        }
+
+        .hero h1 {
+            font-size: 3em;
+            color: #667eea;
+            margin-bottom: 20px;
+        }
+
+        .hero p {
+            font-size: 1.3em;
+            color: #666;
+            line-height: 1.8;
+            margin-bottom: 40px;
+        }
+
+        .btn-launch {
+            display: inline-block;
+            padding: 20px 50px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            text-decoration: none;
+            border-radius: 50px;
+            font-size: 1.5em;
+            font-weight: 600;
+            transition: all 0.3s;
+            box-shadow: 0 10px 30px rgba(102, 126, 234, 0.3);
+        }
+
+        .btn-launch:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 15px 40px rgba(102, 126, 234, 0.5);
+        }
+
+        .features {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 30px;
+            margin-bottom: 40px;
+        }
+
+        .feature-card {
+            background: white;
+            border-radius: 15px;
+            padding: 30px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+            transition: all 0.3s;
+        }
+
+        .feature-card:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 15px 40px rgba(0,0,0,0.3);
+        }
+
+        .feature-card .icon {
+            font-size: 3em;
+            margin-bottom: 15px;
+        }
+
+        .feature-card h3 {
+            color: #667eea;
+            font-size: 1.5em;
+            margin-bottom: 15px;
+        }
+
+        .feature-card p {
+            color: #666;
+            line-height: 1.6;
+        }
+
+        .docs-section {
+            background: white;
+            border-radius: 15px;
+            padding: 40px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+            margin-bottom: 40px;
+        }
+
+        .docs-section h2 {
+            color: #667eea;
+            font-size: 2em;
+            margin-bottom: 30px;
+            text-align: center;
+        }
+
+        .docs-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 20px;
+        }
+
+        .doc-card {
+            background: #f8f9fa;
+            border-radius: 10px;
+            padding: 20px;
+            border: 2px solid #e0e0e0;
+            transition: all 0.3s;
+            text-decoration: none;
+            display: block;
+        }
+
+        .doc-card:hover {
+            border-color: #667eea;
+            background: #f0f2ff;
+            transform: translateX(-5px);
+        }
+
+        .doc-card .doc-icon {
+            font-size: 2em;
+            margin-bottom: 10px;
+        }
+
+        .doc-card h4 {
+            color: #333;
+            margin-bottom: 10px;
+            font-size: 1.2em;
+        }
+
+        .doc-card p {
+            color: #666;
+            font-size: 0.9em;
+            line-height: 1.5;
+        }
+
+        .stats {
+            background: white;
+            border-radius: 15px;
+            padding: 40px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+            margin-bottom: 40px;
+        }
+
+        .stats h2 {
+            color: #667eea;
+            font-size: 2em;
+            margin-bottom: 30px;
+            text-align: center;
+        }
+
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 30px;
+            text-align: center;
+        }
+
+        .stat-item {
+            padding: 20px;
+        }
+
+        .stat-item .number {
+            font-size: 3em;
+            font-weight: 700;
+            color: #667eea;
+            margin-bottom: 10px;
+        }
+
+        .stat-item .label {
+            font-size: 1.1em;
+            color: #666;
+        }
+
+        .footer {
+            background: white;
+            border-radius: 15px;
+            padding: 30px;
+            text-align: center;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+        }
+
+        .footer p {
+            color: #666;
+            margin-bottom: 10px;
+        }
+
+        .footer .love {
+            color: #e74c3c;
+            font-size: 1.2em;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <!-- Hero Section -->
+        <div class="hero">
+            <h1>🎓 نظام إدارة الشهادات المتقدم</h1>
+            <p>
+                أنشئ شهادات احترافية في دقائق معدودة!<br>
+                نظام متكامل لتصميم وتخصيص وتوليد الشهادات بسهولة تامة
+            </p>
+            <a href="certificate_system.html" class="btn-launch">🚀 ابدأ الآن</a>
+        </div>
+
+        <!-- Features Section -->
+        <div class="features">
+            <div class="feature-card">
+                <div class="icon">💾</div>
+                <h3>نظام القوالب</h3>
+                <p>احفظ تصاميمك المفضلة واستعدها في أي وقت. قوالب غير محدودة مع جميع الإعدادات والشعارات.</p>
+            </div>
+
+            <div class="feature-card">
+                <div class="icon">📦</div>
+                <h3>توليد دفعي</h3>
+                <p>ولّد مئات الشهادات دفعة واحدة من ملفات CSV أو Excel. حمّل الكل في ملف ZIP واحد.</p>
+            </div>
+
+            <div class="feature-card">
+                <div class="icon">🎨</div>
+                <h3>تخصيص كامل</h3>
+                <p>تحكم كامل في الألوان والخطوط والتصميم. 7 خطوط احترافية وألوان غير محدودة.</p>
+            </div>
+
+            <div class="feature-card">
+                <div class="icon">🖼️</div>
+                <h3>إدارة شعارات</h3>
+                <p>أضف شعارك بـ 3 أنماط عرض مختلفة. تحكم في الموضع والحجم بدقة عالية.</p>
+            </div>
+
+            <div class="feature-card">
+                <div class="icon">⚡</div>
+                <h3>معاينة فورية</h3>
+                <p>شاهد التغييرات مباشرة على الشاشة. لا انتظار، كل تعديل يظهر فوراً.</p>
+            </div>
+
+            <div class="feature-card">
+                <div class="icon">📥</div>
+                <h3>تصدير متعدد</h3>
+                <p>صدّر شهاداتك كـ PDF عالي الجودة أو صور PNG. جاهزة للطباعة والمشاركة.</p>
+            </div>
+        </div>
+
+        <!-- Statistics Section -->
+        <div class="stats">
+            <h2>📊 إحصائيات مذهلة</h2>
+            <div class="stats-grid">
+                <div class="stat-item">
+                    <div class="number">97%</div>
+                    <div class="label">توفير في الوقت</div>
+                </div>
+                <div class="stat-item">
+                    <div class="number">1000</div>
+                    <div class="label">شهادة في دفعة واحدة</div>
+                </div>
+                <div class="stat-item">
+                    <div class="number">3</div>
+                    <div class="label">أنماط عرض للشعار</div>
+                </div>
+                <div class="stat-item">
+                    <div class="number">0</div>
+                    <div class="label">تكلفة (مجاني تماماً)</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Documentation Section -->
+        <div class="docs-section">
+            <h2>📚 الوثائق والأدلة</h2>
+            <div class="docs-grid">
+                <a href="#" class="doc-card" onclick="alert('افتح ملف: دليل_البدء_السريع.md'); return false;">
+                    <div class="doc-icon">🚀</div>
+                    <h4>دليل البدء السريع</h4>
+                    <p>ابدأ في 3 خطوات سهلة. مثالي للمبتدئين والاستخدام السريع.</p>
+                </a>
+
+                <a href="#" class="doc-card" onclick="alert('افتح ملف: دليل_الاستخدام.md'); return false;">
+                    <div class="doc-icon">📖</div>
+                    <h4>دليل الاستخدام الشامل</h4>
+                    <p>شرح تفصيلي لجميع الميزات مع أمثلة عملية ونصائح احترافية.</p>
+                </a>
+
+                <a href="#" class="doc-card" onclick="alert('افتح ملف: README.md'); return false;">
+                    <div class="doc-icon">📋</div>
+                    <h4>معلومات المشروع</h4>
+                    <p>نظرة عامة شاملة، المواصفات التقنية، وحالات الاستخدام.</p>
+                </a>
+
+                <a href="#" class="doc-card" onclick="alert('افتح ملف: ملخص_المشروع.md'); return false;">
+                    <div class="doc-icon">📊</div>
+                    <h4>ملخص المشروع</h4>
+                    <p>تقرير كامل عن الإنجازات والميزات والإحصائيات.</p>
+                </a>
+
+                <a href="#" class="doc-card" onclick="alert('افتح ملف: نموذج_بيانات.csv'); return false;">
+                    <div class="doc-icon">📄</div>
+                    <h4>ملف CSV نموذجي</h4>
+                    <p>ملف تجريبي جاهز للاستخدام في التوليد الدفعي.</p>
+                </a>
+
+                <a href="certificate_system.html" class="doc-card">
+                    <div class="doc-icon">🎓</div>
+                    <h4>النظام الرئيسي</h4>
+                    <p>افتح التطبيق وابدأ في إنشاء شهاداتك الاحترافية.</p>
+                </a>
+            </div>
+        </div>
+
+        <!-- Quick Example Section -->
+        <div class="docs-section">
+            <h2>💡 مثال سريع</h2>
+            <div style="background: #f8f9fa; padding: 30px; border-radius: 10px; text-align: right;">
+                <h3 style="color: #667eea; margin-bottom: 20px;">📝 السيناريو: دورة تدريبية لـ 50 مشارك</h3>
+                
+                <div style="margin-bottom: 15px;">
+                    <strong style="color: #333;">⏱️ بدون النظام:</strong>
+                    <p style="color: #666; margin-top: 5px;">50 شهادة × 3.5 دقيقة = 175 دقيقة (حوالي 3 ساعات)</p>
+                </div>
+
+                <div style="margin-bottom: 15px;">
+                    <strong style="color: #333;">✨ مع النظام:</strong>
+                    <p style="color: #666; margin-top: 5px;">تصميم (2 دقيقة) + توليد دفعي (3 دقائق) = 5 دقائق فقط!</p>
+                </div>
+
+                <div style="background: #e8f5e9; padding: 20px; border-radius: 8px; margin-top: 20px;">
+                    <strong style="color: #2e7d32; font-size: 1.3em;">🎉 النتيجة: توفير 170 دقيقة (97%)</strong>
+                </div>
+            </div>
+        </div>
+
+        <!-- Footer -->
+        <div class="footer">
+            <p style="font-size: 1.2em; margin-bottom: 15px;">
+                <strong>جاهز لإنشاء شهادات احترافية؟</strong>
+            </p>
+            <a href="certificate_system.html" class="btn-launch" style="padding: 15px 40px; font-size: 1.2em;">
+                🚀 ابدأ الآن مجاناً
+            </a>
+            <p style="margin-top: 30px;">
+                صُمم بـ <span class="love">❤️</span> للمجتمع العربي
+            </p>
+            <p style="font-size: 0.9em; color: #999;">
+                © 2026 نظام إدارة الشهادات المتقدم - جميع الحقوق محفوظة
+            </p>
+        </div>
+    </div>
+</body>
+</html>
