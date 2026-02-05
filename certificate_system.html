@@ -1,0 +1,1082 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>نظام إدارة الشهادات المتقدم</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 15px;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+            overflow: hidden;
+        }
+
+        .header {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 30px;
+            text-align: center;
+        }
+
+        .header h1 {
+            font-size: 2.5em;
+            margin-bottom: 10px;
+        }
+
+        .header p {
+            font-size: 1.1em;
+            opacity: 0.9;
+        }
+
+        .main-content {
+            display: grid;
+            grid-template-columns: 350px 1fr;
+            gap: 0;
+            min-height: 800px;
+        }
+
+        .sidebar {
+            background: #f8f9fa;
+            padding: 25px;
+            border-left: 2px solid #e0e0e0;
+            overflow-y: auto;
+            max-height: calc(100vh - 200px);
+        }
+
+        .section {
+            background: white;
+            border-radius: 10px;
+            padding: 20px;
+            margin-bottom: 20px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+        }
+
+        .section h3 {
+            color: #667eea;
+            margin-bottom: 15px;
+            font-size: 1.2em;
+            border-bottom: 2px solid #667eea;
+            padding-bottom: 8px;
+        }
+
+        .form-group {
+            margin-bottom: 15px;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 5px;
+            font-weight: 600;
+            color: #333;
+            font-size: 0.95em;
+        }
+
+        .form-group input[type="text"],
+        .form-group input[type="number"],
+        .form-group input[type="color"],
+        .form-group input[type="file"],
+        .form-group select,
+        .form-group textarea {
+            width: 100%;
+            padding: 10px;
+            border: 2px solid #e0e0e0;
+            border-radius: 6px;
+            font-size: 0.95em;
+            transition: all 0.3s;
+        }
+
+        .form-group input:focus,
+        .form-group select:focus,
+        .form-group textarea:focus {
+            outline: none;
+            border-color: #667eea;
+            box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
+        }
+
+        .form-group textarea {
+            resize: vertical;
+            min-height: 80px;
+            font-family: inherit;
+        }
+
+        .color-picker-group {
+            display: grid;
+            grid-template-columns: 1fr 60px;
+            gap: 10px;
+            align-items: center;
+        }
+
+        .color-picker-group input[type="color"] {
+            height: 40px;
+            cursor: pointer;
+        }
+
+        .btn {
+            padding: 12px 24px;
+            border: none;
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 1em;
+            font-weight: 600;
+            transition: all 0.3s;
+            width: 100%;
+            margin-bottom: 10px;
+        }
+
+        .btn-primary {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(102, 126, 234, 0.4);
+        }
+
+        .btn-success {
+            background: linear-gradient(135deg, #11998e 0%, #38ef7d 100%);
+            color: white;
+        }
+
+        .btn-success:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(56, 239, 125, 0.4);
+        }
+
+        .btn-info {
+            background: linear-gradient(135deg, #3498db 0%, #2980b9 100%);
+            color: white;
+        }
+
+        .btn-info:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(52, 152, 219, 0.4);
+        }
+
+        .btn-warning {
+            background: linear-gradient(135deg, #f39c12 0%, #e67e22 100%);
+            color: white;
+        }
+
+        .preview-area {
+            padding: 40px;
+            background: #fafafa;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .certificate-preview {
+            background: white;
+            border: 3px solid #667eea;
+            border-radius: 10px;
+            padding: 0;
+            box-shadow: 0 10px 40px rgba(0,0,0,0.2);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .canvas-container {
+            position: relative;
+        }
+
+        #certificateCanvas {
+            display: block;
+            max-width: 100%;
+            height: auto;
+        }
+
+        .template-list {
+            max-height: 300px;
+            overflow-y: auto;
+        }
+
+        .template-item {
+            background: #f8f9fa;
+            padding: 12px;
+            margin-bottom: 10px;
+            border-radius: 6px;
+            border: 2px solid #e0e0e0;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .template-item:hover {
+            border-color: #667eea;
+            background: #f0f2ff;
+            transform: translateX(-5px);
+        }
+
+        .template-item h4 {
+            color: #333;
+            margin-bottom: 5px;
+        }
+
+        .template-item p {
+            color: #666;
+            font-size: 0.85em;
+        }
+
+        .template-actions {
+            display: flex;
+            gap: 5px;
+            margin-top: 8px;
+        }
+
+        .template-actions button {
+            flex: 1;
+            padding: 6px;
+            font-size: 0.85em;
+        }
+
+        .batch-upload-area {
+            border: 2px dashed #667eea;
+            border-radius: 8px;
+            padding: 20px;
+            text-align: center;
+            background: #f8f9ff;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .batch-upload-area:hover {
+            background: #f0f2ff;
+            border-color: #764ba2;
+        }
+
+        .batch-upload-area.dragover {
+            background: #e8ebff;
+            border-color: #667eea;
+        }
+
+        .file-info {
+            margin-top: 10px;
+            padding: 10px;
+            background: #e8f5e9;
+            border-radius: 6px;
+            font-size: 0.9em;
+        }
+
+        .tabs {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 20px;
+        }
+
+        .tab {
+            flex: 1;
+            padding: 12px;
+            background: #e0e0e0;
+            border: none;
+            border-radius: 6px;
+            cursor: pointer;
+            font-weight: 600;
+            transition: all 0.3s;
+        }
+
+        .tab.active {
+            background: #667eea;
+            color: white;
+        }
+
+        .tab-content {
+            display: none;
+        }
+
+        .tab-content.active {
+            display: block;
+        }
+
+        .progress-container {
+            margin-top: 20px;
+            display: none;
+        }
+
+        .progress-bar {
+            width: 100%;
+            height: 30px;
+            background: #e0e0e0;
+            border-radius: 15px;
+            overflow: hidden;
+            margin-bottom: 10px;
+        }
+
+        .progress-fill {
+            height: 100%;
+            background: linear-gradient(90deg, #667eea 0%, #764ba2 100%);
+            transition: width 0.3s;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-weight: 600;
+        }
+
+        .range-slider {
+            width: 100%;
+        }
+
+        .position-controls {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 10px;
+        }
+
+        @media print {
+            body * {
+                visibility: hidden;
+            }
+            .certificate-preview, .certificate-preview * {
+                visibility: visible;
+            }
+            .certificate-preview {
+                position: absolute;
+                left: 0;
+                top: 0;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>🎓 نظام إدارة الشهادات المتقدم</h1>
+            <p>أنشئ وخصص وأدر شهادات احترافية بسهولة</p>
+        </div>
+
+        <div class="main-content">
+            <div class="sidebar">
+                <!-- Tabs -->
+                <div class="tabs">
+                    <button class="tab active" onclick="switchTab('design')">التصميم</button>
+                    <button class="tab" onclick="switchTab('batch')">دفعي</button>
+                    <button class="tab" onclick="switchTab('templates')">القوالب</button>
+                </div>
+
+                <!-- Design Tab -->
+                <div id="design-tab" class="tab-content active">
+                    <div class="section">
+                        <h3>📝 المحتوى الأساسي</h3>
+                        <div class="form-group">
+                            <label>اسم المستلم:</label>
+                            <input type="text" id="recipientName" value="محمد أحمد" oninput="updateCertificate()">
+                        </div>
+                        <div class="form-group">
+                            <label>عنوان الشهادة:</label>
+                            <input type="text" id="certificateTitle" value="شهادة تقدير" oninput="updateCertificate()">
+                        </div>
+                        <div class="form-group">
+                            <label>نص الشهادة:</label>
+                            <textarea id="certificateText" oninput="updateCertificate()">يُمنح هذه الشهادة تقديراً للإنجازات المتميزة والجهود المبذولة في مجال التطوير والابتكار</textarea>
+                        </div>
+                        <div class="form-group">
+                            <label>اسم الجهة المُصدرة:</label>
+                            <input type="text" id="issuerName" value="المعهد التقني المتقدم" oninput="updateCertificate()">
+                        </div>
+                        <div class="form-group">
+                            <label>التاريخ:</label>
+                            <input type="text" id="certificateDate" value="2026-02-05" oninput="updateCertificate()">
+                        </div>
+                    </div>
+
+                    <div class="section">
+                        <h3>🎨 تخصيص التصميم</h3>
+                        <div class="form-group">
+                            <label>الخط المستخدم:</label>
+                            <select id="fontFamily" onchange="updateCertificate()">
+                                <option value="Arial">Arial</option>
+                                <option value="Times New Roman">Times New Roman</option>
+                                <option value="Georgia">Georgia</option>
+                                <option value="Courier New">Courier New</option>
+                                <option value="Verdana">Verdana</option>
+                                <option value="Tahoma">Tahoma</option>
+                                <option value="Traditional Arabic" selected>Traditional Arabic</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label>لون الحدود:</label>
+                            <div class="color-picker-group">
+                                <input type="text" id="borderColorText" value="#667eea" readonly>
+                                <input type="color" id="borderColor" value="#667eea" onchange="updateBorderColor()">
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label>لون النص الرئيسي:</label>
+                            <div class="color-picker-group">
+                                <input type="text" id="textColorText" value="#333333" readonly>
+                                <input type="color" id="textColor" value="#333333" onchange="updateTextColor()">
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label>لون الخلفية:</label>
+                            <div class="color-picker-group">
+                                <input type="text" id="bgColorText" value="#ffffff" readonly>
+                                <input type="color" id="bgColor" value="#ffffff" onchange="updateBgColor()">
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label>شعار الجهة المُصدرة:</label>
+                            <input type="file" id="logoUpload" accept="image/*" onchange="handleLogoUpload(event)">
+                        </div>
+                    </div>
+
+                    <div class="section">
+                        <h3>📐 موضع وحجم العناصر</h3>
+                        <div class="form-group">
+                            <label>موضع الشعار - أفقي (0-100%):</label>
+                            <input type="range" class="range-slider" id="logoX" min="0" max="100" value="50" oninput="updateLogoPosition()">
+                            <span id="logoXValue">50%</span>
+                        </div>
+                        <div class="form-group">
+                            <label>موضع الشعار - عمودي (0-100%):</label>
+                            <input type="range" class="range-slider" id="logoY" min="0" max="100" value="15" oninput="updateLogoPosition()">
+                            <span id="logoYValue">15%</span>
+                        </div>
+                        <div class="form-group">
+                            <label>حجم الشعار (50-300 بكسل):</label>
+                            <input type="range" class="range-slider" id="logoSize" min="50" max="300" value="100" oninput="updateLogoSize()">
+                            <span id="logoSizeValue">100px</span>
+                        </div>
+                        <div class="form-group">
+                            <label>نمط عرض الشعار:</label>
+                            <select id="logoFitMode" onchange="updateCertificate()">
+                                <option value="contain">احتواء (Contain)</option>
+                                <option value="cover">تمدد كامل (Cover)</option>
+                                <option value="fill">ملء طبيعي (Fill)</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <div class="section">
+                        <h3>💾 حفظ وتصدير</h3>
+                        <button class="btn btn-primary" onclick="saveAsTemplate()">💾 حفظ كقالب</button>
+                        <button class="btn btn-success" onclick="downloadCertificate()">📥 تحميل PDF</button>
+                        <button class="btn btn-info" onclick="downloadCertificateImage()">🖼️ تحميل صورة</button>
+                    </div>
+                </div>
+
+                <!-- Batch Tab -->
+                <div id="batch-tab" class="tab-content">
+                    <div class="section">
+                        <h3>📊 التوليد الدفعي</h3>
+                        <div class="batch-upload-area" onclick="document.getElementById('batchFile').click()" ondrop="handleDrop(event)" ondragover="handleDragOver(event)" ondragleave="handleDragLeave(event)">
+                            <p style="font-size: 1.2em; margin-bottom: 10px;">📁 اسحب وأفلت ملف CSV أو Excel</p>
+                            <p style="color: #666;">أو اضغط للتصفح</p>
+                            <input type="file" id="batchFile" accept=".csv,.xlsx,.xls" style="display: none;" onchange="handleBatchFile(event)">
+                        </div>
+                        <div id="fileInfo" class="file-info" style="display: none;"></div>
+                        
+                        <div class="form-group" style="margin-top: 20px;">
+                            <label>
+                                <input type="checkbox" id="useUniformText" checked>
+                                استخدام نص موحد لجميع الشهادات
+                            </label>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label>النص الموحد (اختياري):</label>
+                            <textarea id="uniformText">يُمنح هذه الشهادة تقديراً للإنجازات المتميزة</textarea>
+                        </div>
+                        
+                        <button class="btn btn-success" onclick="generateBatchCertificates()">🚀 توليد الشهادات</button>
+                        
+                        <div class="progress-container" id="progressContainer">
+                            <div class="progress-bar">
+                                <div class="progress-fill" id="progressFill">0%</div>
+                            </div>
+                            <p id="progressText" style="text-align: center; color: #666;"></p>
+                        </div>
+                    </div>
+
+                    <div class="section">
+                        <h3>ℹ️ تعليمات ملف CSV/Excel</h3>
+                        <p style="font-size: 0.9em; line-height: 1.6; color: #666;">
+                            يجب أن يحتوي الملف على الأعمدة التالية:<br>
+                            <strong>• name</strong> (الاسم) - إلزامي<br>
+                            <strong>• text</strong> (النص) - اختياري<br>
+                            <strong>• date</strong> (التاريخ) - اختياري<br><br>
+                            مثال:<br>
+                            name,text,date<br>
+                            محمد أحمد,نص مخصص,2026-02-05<br>
+                            سارة علي,,2026-02-05
+                        </p>
+                        <button class="btn btn-info" onclick="downloadSampleCSV()">📄 تحميل ملف نموذجي</button>
+                    </div>
+                </div>
+
+                <!-- Templates Tab -->
+                <div id="templates-tab" class="tab-content">
+                    <div class="section">
+                        <h3>📚 القوالب المحفوظة</h3>
+                        <div class="template-list" id="templateList">
+                            <p style="color: #666; text-align: center;">لا توجد قوالب محفوظة بعد</p>
+                        </div>
+                    </div>
+                    
+                    <div class="section">
+                        <h3>🗑️ إدارة القوالب</h3>
+                        <button class="btn btn-warning" onclick="clearAllTemplates()">🗑️ حذف جميع القوالب</button>
+                    </div>
+                </div>
+            </div>
+
+            <div class="preview-area">
+                <h2 style="margin-bottom: 20px; color: #667eea;">👁️ معاينة الشهادة</h2>
+                <div class="certificate-preview">
+                    <div class="canvas-container">
+                        <canvas id="certificateCanvas" width="1200" height="850"></canvas>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.10.1/jszip.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/FileSaver.js/2.0.5/FileSaver.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
+
+    <script>
+        let logoImage = null;
+        let currentSettings = {
+            logoX: 50,
+            logoY: 15,
+            logoSize: 100,
+            logoFitMode: 'contain'
+        };
+
+        // Tab switching
+        function switchTab(tabName) {
+            document.querySelectorAll('.tab').forEach(tab => tab.classList.remove('active'));
+            document.querySelectorAll('.tab-content').forEach(content => content.classList.remove('active'));
+            
+            event.target.classList.add('active');
+            document.getElementById(tabName + '-tab').classList.add('active');
+        }
+
+        // Color pickers
+        function updateBorderColor() {
+            const color = document.getElementById('borderColor').value;
+            document.getElementById('borderColorText').value = color;
+            updateCertificate();
+        }
+
+        function updateTextColor() {
+            const color = document.getElementById('textColor').value;
+            document.getElementById('textColorText').value = color;
+            updateCertificate();
+        }
+
+        function updateBgColor() {
+            const color = document.getElementById('bgColor').value;
+            document.getElementById('bgColorText').value = color;
+            updateCertificate();
+        }
+
+        // Logo upload
+        function handleLogoUpload(event) {
+            const file = event.target.files[0];
+            if (file) {
+                const reader = new FileReader();
+                reader.onload = function(e) {
+                    const img = new Image();
+                    img.onload = function() {
+                        logoImage = img;
+                        updateCertificate();
+                    };
+                    img.src = e.target.result;
+                };
+                reader.readAsDataURL(file);
+            }
+        }
+
+        // Logo position and size
+        function updateLogoPosition() {
+            currentSettings.logoX = document.getElementById('logoX').value;
+            currentSettings.logoY = document.getElementById('logoY').value;
+            document.getElementById('logoXValue').textContent = currentSettings.logoX + '%';
+            document.getElementById('logoYValue').textContent = currentSettings.logoY + '%';
+            updateCertificate();
+        }
+
+        function updateLogoSize() {
+            currentSettings.logoSize = document.getElementById('logoSize').value;
+            document.getElementById('logoSizeValue').textContent = currentSettings.logoSize + 'px';
+            updateCertificate();
+        }
+
+        // Draw certificate
+        function updateCertificate() {
+            const canvas = document.getElementById('certificateCanvas');
+            const ctx = canvas.getContext('2d');
+            
+            // Get settings
+            const recipientName = document.getElementById('recipientName').value;
+            const title = document.getElementById('certificateTitle').value;
+            const text = document.getElementById('certificateText').value;
+            const issuer = document.getElementById('issuerName').value;
+            const date = document.getElementById('certificateDate').value;
+            const fontFamily = document.getElementById('fontFamily').value;
+            const borderColor = document.getElementById('borderColor').value;
+            const textColor = document.getElementById('textColor').value;
+            const bgColor = document.getElementById('bgColor').value;
+            const logoFitMode = document.getElementById('logoFitMode').value;
+            
+            // Clear canvas
+            ctx.fillStyle = bgColor;
+            ctx.fillRect(0, 0, canvas.width, canvas.height);
+            
+            // Draw decorative border
+            ctx.strokeStyle = borderColor;
+            ctx.lineWidth = 20;
+            ctx.strokeRect(30, 30, canvas.width - 60, canvas.height - 60);
+            
+            ctx.lineWidth = 3;
+            ctx.strokeRect(50, 50, canvas.width - 100, canvas.height - 100);
+            
+            // Draw logo if uploaded
+            if (logoImage) {
+                const logoSize = parseInt(currentSettings.logoSize);
+                const logoX = (canvas.width * currentSettings.logoX / 100) - (logoSize / 2);
+                const logoY = canvas.height * currentSettings.logoY / 100;
+                
+                ctx.save();
+                
+                if (logoFitMode === 'contain') {
+                    // احتواء - الحفاظ على النسبة
+                    const scale = Math.min(logoSize / logoImage.width, logoSize / logoImage.height);
+                    const width = logoImage.width * scale;
+                    const height = logoImage.height * scale;
+                    ctx.drawImage(logoImage, logoX, logoY, width, height);
+                } else if (logoFitMode === 'cover') {
+                    // تمدد كامل - ملء المساحة
+                    const scale = Math.max(logoSize / logoImage.width, logoSize / logoImage.height);
+                    const width = logoImage.width * scale;
+                    const height = logoImage.height * scale;
+                    const offsetX = (logoSize - width) / 2;
+                    const offsetY = (logoSize - height) / 2;
+                    ctx.drawImage(logoImage, logoX + offsetX, logoY + offsetY, width, height);
+                } else {
+                    // ملء طبيعي - تمديد بدون حفظ النسبة
+                    ctx.drawImage(logoImage, logoX, logoY, logoSize, logoSize);
+                }
+                
+                ctx.restore();
+            }
+            
+            // Draw title
+            ctx.fillStyle = borderColor;
+            ctx.font = `bold 60px ${fontFamily}`;
+            ctx.textAlign = 'center';
+            ctx.fillText(title, canvas.width / 2, 250);
+            
+            // Draw decorative line
+            ctx.strokeStyle = borderColor;
+            ctx.lineWidth = 3;
+            ctx.beginPath();
+            ctx.moveTo(300, 280);
+            ctx.lineTo(900, 280);
+            ctx.stroke();
+            
+            // Draw recipient name
+            ctx.fillStyle = textColor;
+            ctx.font = `bold 48px ${fontFamily}`;
+            ctx.fillText(recipientName, canvas.width / 2, 370);
+            
+            // Draw certificate text (multiline)
+            ctx.font = `24px ${fontFamily}`;
+            const lines = wrapText(ctx, text, canvas.width - 250);
+            let y = 450;
+            lines.forEach(line => {
+                ctx.fillText(line, canvas.width / 2, y);
+                y += 35;
+            });
+            
+            // Draw issuer and date
+            ctx.font = `italic 20px ${fontFamily}`;
+            ctx.fillStyle = '#666';
+            ctx.fillText(issuer, canvas.width / 2, canvas.height - 150);
+            ctx.fillText(date, canvas.width / 2, canvas.height - 110);
+        }
+
+        // Wrap text for multiline
+        function wrapText(ctx, text, maxWidth) {
+            const words = text.split(' ');
+            const lines = [];
+            let currentLine = '';
+            
+            words.forEach(word => {
+                const testLine = currentLine + word + ' ';
+                const metrics = ctx.measureText(testLine);
+                if (metrics.width > maxWidth && currentLine !== '') {
+                    lines.push(currentLine.trim());
+                    currentLine = word + ' ';
+                } else {
+                    currentLine = testLine;
+                }
+            });
+            lines.push(currentLine.trim());
+            return lines;
+        }
+
+        // Save as template
+        function saveAsTemplate() {
+            const templateName = prompt('أدخل اسم القالب:');
+            if (!templateName) return;
+            
+            const template = {
+                name: templateName,
+                date: new Date().toISOString(),
+                settings: {
+                    title: document.getElementById('certificateTitle').value,
+                    text: document.getElementById('certificateText').value,
+                    issuer: document.getElementById('issuerName').value,
+                    fontFamily: document.getElementById('fontFamily').value,
+                    borderColor: document.getElementById('borderColor').value,
+                    textColor: document.getElementById('textColor').value,
+                    bgColor: document.getElementById('bgColor').value,
+                    logoX: currentSettings.logoX,
+                    logoY: currentSettings.logoY,
+                    logoSize: currentSettings.logoSize,
+                    logoFitMode: document.getElementById('logoFitMode').value,
+                    logoData: logoImage ? document.getElementById('certificateCanvas').toDataURL() : null
+                }
+            };
+            
+            // Save to localStorage
+            let templates = JSON.parse(localStorage.getItem('certificateTemplates') || '[]');
+            templates.push(template);
+            localStorage.setItem('certificateTemplates', JSON.stringify(templates));
+            
+            alert('✅ تم حفظ القالب بنجاح!');
+            loadTemplates();
+        }
+
+        // Load templates
+        function loadTemplates() {
+            const templates = JSON.parse(localStorage.getItem('certificateTemplates') || '[]');
+            const templateList = document.getElementById('templateList');
+            
+            if (templates.length === 0) {
+                templateList.innerHTML = '<p style="color: #666; text-align: center;">لا توجد قوالب محفوظة بعد</p>';
+                return;
+            }
+            
+            templateList.innerHTML = '';
+            templates.forEach((template, index) => {
+                const div = document.createElement('div');
+                div.className = 'template-item';
+                div.innerHTML = `
+                    <h4>${template.name}</h4>
+                    <p>تاريخ الحفظ: ${new Date(template.date).toLocaleDateString('ar-EG')}</p>
+                    <div class="template-actions">
+                        <button class="btn btn-primary" onclick="loadTemplate(${index})">تحميل</button>
+                        <button class="btn btn-warning" onclick="deleteTemplate(${index})">حذف</button>
+                    </div>
+                `;
+                templateList.appendChild(div);
+            });
+        }
+
+        // Load specific template
+        function loadTemplate(index) {
+            const templates = JSON.parse(localStorage.getItem('certificateTemplates') || '[]');
+            const template = templates[index];
+            
+            if (!template) return;
+            
+            const settings = template.settings;
+            document.getElementById('certificateTitle').value = settings.title;
+            document.getElementById('certificateText').value = settings.text;
+            document.getElementById('issuerName').value = settings.issuer;
+            document.getElementById('fontFamily').value = settings.fontFamily;
+            document.getElementById('borderColor').value = settings.borderColor;
+            document.getElementById('borderColorText').value = settings.borderColor;
+            document.getElementById('textColor').value = settings.textColor;
+            document.getElementById('textColorText').value = settings.textColor;
+            document.getElementById('bgColor').value = settings.bgColor;
+            document.getElementById('bgColorText').value = settings.bgColor;
+            document.getElementById('logoX').value = settings.logoX;
+            document.getElementById('logoY').value = settings.logoY;
+            document.getElementById('logoSize').value = settings.logoSize;
+            document.getElementById('logoFitMode').value = settings.logoFitMode;
+            
+            currentSettings.logoX = settings.logoX;
+            currentSettings.logoY = settings.logoY;
+            currentSettings.logoSize = settings.logoSize;
+            
+            document.getElementById('logoXValue').textContent = settings.logoX + '%';
+            document.getElementById('logoYValue').textContent = settings.logoY + '%';
+            document.getElementById('logoSizeValue').textContent = settings.logoSize + 'px';
+            
+            if (settings.logoData) {
+                const img = new Image();
+                img.onload = function() {
+                    logoImage = img;
+                    updateCertificate();
+                };
+                img.src = settings.logoData;
+            }
+            
+            updateCertificate();
+            switchTab('design');
+            alert('✅ تم تحميل القالب بنجاح!');
+        }
+
+        // Delete template
+        function deleteTemplate(index) {
+            if (!confirm('هل أنت متأكد من حذف هذا القالب؟')) return;
+            
+            let templates = JSON.parse(localStorage.getItem('certificateTemplates') || '[]');
+            templates.splice(index, 1);
+            localStorage.setItem('certificateTemplates', JSON.stringify(templates));
+            
+            loadTemplates();
+            alert('✅ تم حذف القالب بنجاح!');
+        }
+
+        // Clear all templates
+        function clearAllTemplates() {
+            if (!confirm('هل أنت متأكد من حذف جميع القوالب؟')) return;
+            
+            localStorage.removeItem('certificateTemplates');
+            loadTemplates();
+            alert('✅ تم حذف جميع القوالب بنجاح!');
+        }
+
+        // Download certificate as PDF
+        function downloadCertificate() {
+            const { jsPDF } = window.jspdf;
+            const canvas = document.getElementById('certificateCanvas');
+            const imgData = canvas.toDataURL('image/png');
+            
+            const pdf = new jsPDF({
+                orientation: 'landscape',
+                unit: 'px',
+                format: [canvas.width, canvas.height]
+            });
+            
+            pdf.addImage(imgData, 'PNG', 0, 0, canvas.width, canvas.height);
+            pdf.save(`شهادة_${document.getElementById('recipientName').value}.pdf`);
+        }
+
+        // Download certificate as image
+        function downloadCertificateImage() {
+            const canvas = document.getElementById('certificateCanvas');
+            canvas.toBlob(function(blob) {
+                saveAs(blob, `شهادة_${document.getElementById('recipientName').value}.png`);
+            });
+        }
+
+        // Batch file handling
+        function handleDragOver(event) {
+            event.preventDefault();
+            event.currentTarget.classList.add('dragover');
+        }
+
+        function handleDragLeave(event) {
+            event.currentTarget.classList.remove('dragover');
+        }
+
+        function handleDrop(event) {
+            event.preventDefault();
+            event.currentTarget.classList.remove('dragover');
+            const file = event.dataTransfer.files[0];
+            if (file) {
+                document.getElementById('batchFile').files = event.dataTransfer.files;
+                handleBatchFile({ target: { files: [file] } });
+            }
+        }
+
+        function handleBatchFile(event) {
+            const file = event.target.files[0];
+            if (!file) return;
+            
+            const fileInfo = document.getElementById('fileInfo');
+            fileInfo.style.display = 'block';
+            fileInfo.innerHTML = `
+                <strong>الملف المحدد:</strong> ${file.name}<br>
+                <strong>الحجم:</strong> ${(file.size / 1024).toFixed(2)} KB
+            `;
+        }
+
+        // Generate batch certificates
+        async function generateBatchCertificates() {
+            const file = document.getElementById('batchFile').files[0];
+            if (!file) {
+                alert('⚠️ الرجاء اختيار ملف CSV أو Excel');
+                return;
+            }
+            
+            const useUniformText = document.getElementById('useUniformText').checked;
+            const uniformText = document.getElementById('uniformText').value;
+            
+            // Show progress
+            const progressContainer = document.getElementById('progressContainer');
+            const progressFill = document.getElementById('progressFill');
+            const progressText = document.getElementById('progressText');
+            progressContainer.style.display = 'block';
+            
+            try {
+                // Read file
+                const data = await readFile(file);
+                const records = parseData(data, file.name);
+                
+                if (records.length === 0) {
+                    alert('⚠️ الملف فارغ أو بتنسيق غير صحيح');
+                    return;
+                }
+                
+                // Generate certificates
+                const zip = new JSZip();
+                const { jsPDF } = window.jspdf;
+                
+                for (let i = 0; i < records.length; i++) {
+                    const record = records[i];
+                    const progress = Math.round(((i + 1) / records.length) * 100);
+                    
+                    progressFill.style.width = progress + '%';
+                    progressFill.textContent = progress + '%';
+                    progressText.textContent = `جاري توليد الشهادة ${i + 1} من ${records.length}`;
+                    
+                    // Update fields
+                    document.getElementById('recipientName').value = record.name;
+                    document.getElementById('certificateText').value = useUniformText ? uniformText : (record.text || uniformText);
+                    if (record.date) {
+                        document.getElementById('certificateDate').value = record.date;
+                    }
+                    
+                    // Draw certificate
+                    updateCertificate();
+                    
+                    // Wait for drawing to complete
+                    await new Promise(resolve => setTimeout(resolve, 100));
+                    
+                    // Generate PDF
+                    const canvas = document.getElementById('certificateCanvas');
+                    const imgData = canvas.toDataURL('image/png');
+                    
+                    const pdf = new jsPDF({
+                        orientation: 'landscape',
+                        unit: 'px',
+                        format: [canvas.width, canvas.height]
+                    });
+                    
+                    pdf.addImage(imgData, 'PNG', 0, 0, canvas.width, canvas.height);
+                    const pdfBlob = pdf.output('blob');
+                    
+                    zip.file(`شهادة_${record.name}.pdf`, pdfBlob);
+                }
+                
+                // Download zip
+                progressText.textContent = 'جاري إنشاء الملف المضغوط...';
+                const zipBlob = await zip.generateAsync({ type: 'blob' });
+                saveAs(zipBlob, `شهادات_دفعة_${new Date().toISOString().split('T')[0]}.zip`);
+                
+                progressText.textContent = '✅ تم توليد جميع الشهادات بنجاح!';
+                setTimeout(() => {
+                    progressContainer.style.display = 'none';
+                    progressFill.style.width = '0%';
+                }, 3000);
+                
+            } catch (error) {
+                alert('❌ حدث خطأ أثناء معالجة الملف: ' + error.message);
+                progressContainer.style.display = 'none';
+            }
+        }
+
+        // Read file
+        function readFile(file) {
+            return new Promise((resolve, reject) => {
+                const reader = new FileReader();
+                reader.onload = (e) => resolve(e.target.result);
+                reader.onerror = (e) => reject(e);
+                
+                if (file.name.endsWith('.csv')) {
+                    reader.readAsText(file);
+                } else {
+                    reader.readAsBinaryString(file);
+                }
+            });
+        }
+
+        // Parse data
+        function parseData(data, filename) {
+            if (filename.endsWith('.csv')) {
+                return parseCSV(data);
+            } else {
+                return parseExcel(data);
+            }
+        }
+
+        // Parse CSV
+        function parseCSV(csvText) {
+            const lines = csvText.split('\n').filter(line => line.trim());
+            if (lines.length < 2) return [];
+            
+            const headers = lines[0].split(',').map(h => h.trim().toLowerCase());
+            const records = [];
+            
+            for (let i = 1; i < lines.length; i++) {
+                const values = lines[i].split(',');
+                const record = {};
+                headers.forEach((header, index) => {
+                    record[header] = values[index] ? values[index].trim() : '';
+                });
+                if (record.name) {
+                    records.push(record);
+                }
+            }
+            
+            return records;
+        }
+
+        // Parse Excel
+        function parseExcel(data) {
+            const workbook = XLSX.read(data, { type: 'binary' });
+            const firstSheet = workbook.Sheets[workbook.SheetNames[0]];
+            const jsonData = XLSX.utils.sheet_to_json(firstSheet);
+            
+            return jsonData.map(row => ({
+                name: row.name || row.Name || row.NAME || '',
+                text: row.text || row.Text || row.TEXT || '',
+                date: row.date || row.Date || row.DATE || ''
+            })).filter(r => r.name);
+        }
+
+        // Download sample CSV
+        function downloadSampleCSV() {
+            const csvContent = `name,text,date
+محمد أحمد,يُمنح هذه الشهادة تقديراً للإنجازات المتميزة,2026-02-05
+سارة علي,تقديراً للجهود المبذولة في مجال التطوير,2026-02-05
+أحمد محمود,,2026-02-05`;
+            
+            const blob = new Blob(['\ufeff' + csvContent], { type: 'text/csv;charset=utf-8;' });
+            saveAs(blob, 'نموذج_شهادات.csv');
+        }
+
+        // Initialize
+        window.onload = function() {
+            updateCertificate();
+            loadTemplates();
+        };
+    </script>
+</body>
+</html>
